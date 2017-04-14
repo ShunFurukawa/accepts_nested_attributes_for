@@ -15,7 +15,9 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    @user.addresses.build
+    1.times {
+      @user.addresses.build
+    }
   end
 
   # GET /users/1/edit
@@ -26,7 +28,6 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }
@@ -70,6 +71,11 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :age)
+      params.require(:user).permit(
+        :username,
+        :age,
+        addresses_attributes: [:id, :zipcode, :city, :street, :tel]
+      )
     end
+
 end
